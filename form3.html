@@ -71,7 +71,7 @@
     </header>
 
     <main>
-      <div id="timer">Thời gian còn lại: 10:00</div>
+      <div id="timer">Thời gian còn lại: <span id="countdown">10:00</span></div>
 
       <div class="question" id="question">
         <!-- Câu hỏi sẽ được hiển thị tại đây -->
@@ -87,7 +87,7 @@
 
     <script>
       const quizData = [
-    {
+      {
         question: "What is the capital of France?",
         options: ["1. Paris", "2. Berlin", "3. Madrid", "4. Rome"],
         correctAnswer: "1. Paris",
@@ -228,24 +228,26 @@
         options: ["1. Eagle", "2. Ostrich", "3. Penguin", "4. Emu"],
         correctAnswer: "2. Ostrich",
     },
-];
+          // Dữ liệu câu hỏi
+      ];
 
-console.log(quizData);
 
 
       const quizContainer = document.getElementById("question");
       const optionsElement = document.getElementById("options");
       const submitButton = document.querySelector("button");
       const resultElement = document.getElementById("result");
+      const countdownElement = document.getElementById("countdown"); // Đối tượng hiển thị đồng hồ đếm ngược
 
       let currentQuestion = 0;
       let score = 0;
+      let timeLeft = 600; // Thời gian ban đầu là 10 phút (10 * 60 giây)
 
       function loadQuestion() {
-      const currentQuizData = quizData[currentQuestion];
-      quizContainer.innerText = currentQuizData.question;
-      optionsElement.innerHTML = "";
-      currentQuizData.options.forEach((option, index) => {
+        const currentQuizData = quizData[currentQuestion];
+        quizContainer.innerText = currentQuizData.question;
+        optionsElement.innerHTML = "";
+        currentQuizData.options.forEach((option, index) => {
         const optionElement = document.createElement("li");
         optionElement.innerHTML = `
           <input type="radio" id="option${index}" name="answer" value="${option.replace(/^\d+\.\s/, '')}" />
@@ -253,7 +255,8 @@ console.log(quizData);
         `;
         optionsElement.appendChild(optionElement);
       });
-    }
+          // Hàm tải câu hỏi
+      }
 
       function checkAnswer(selectedOption) {
         const currentQuizData = quizData[currentQuestion];
@@ -266,6 +269,7 @@ console.log(quizData);
         } else {
           showResult();
         }
+          // Hàm kiểm tra câu trả lời
       }
 
       function showResult() {
@@ -275,11 +279,29 @@ console.log(quizData);
         resultElement.innerText = `Your score: ${score} out of ${quizData.length}`;
         resultElement.style.display = "block";
         window.location.href = "./form4.html";
+          // Hàm hiển thị kết quả
+      }
+
+      function updateCountdown() {
+          const minutes = Math.floor(timeLeft / 60);
+          let seconds = timeLeft % 60;
+          seconds = seconds < 10 ? '0' + seconds : seconds; // Đảm bảo hiển thị số giây đẹp hơn
+
+          countdownElement.textContent = `${minutes}:${seconds}`;
+
+          if (timeLeft === 0) {
+              clearInterval(timer); // Dừng đếm ngược khi hết thời gian
+              showResult();
+          } else {
+              timeLeft--;
+          }
       }
 
       loadQuestion();
       submitButton.addEventListener("click", () => checkAnswer());
 
+      // Bắt đầu đếm ngược khi trang web được tải
+      const timer = setInterval(updateCountdown, 1000); // Cập nhật đồng hồ đếm ngược mỗi giây
     </script>
   </body>
 </html>
