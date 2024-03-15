@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xem Kết quả của Từng Sinh Viên</title>
+    <style>
+        body {
+            font-family: "Arial", sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #fd0000;
+            color: #fff;
+            padding: 15px;
+            text-align: center;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        input, select, button {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #fd0000;
+            color: #fff;
+            cursor: pointer;
+            border: none;
+        }
+
+        button:hover {
+            background-color: #fd0000;
+        }
+
+        #student-results {
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #fd0000;
+            color: white;
+        }
+
+        tr:hover {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Xem Kết quả của Từng Sinh Viên</h1>
+    </header>
+
+    <main>
+        <label for="search-input">Tìm kiếm sinh viên:</label>
+        <input type="text" id="search-input" placeholder="Nhập tên hoặc mã số sinh viên">
+        <button onclick="searchStudent()">Tìm kiếm</button>
+
+        <div id="student-results">
+            <!-- Kết quả tìm kiếm sẽ được hiển thị ở đây -->
+        </div>
+    </main>
+
+    <script>
+        // Giả sử dữ liệu kết quả của từng sinh viên được lưu trong một mảng students
+        var students = [
+            {
+                name: "John Doe",
+                studentID: "12345",
+                results: [
+                    { examName: "Kỳ thi 1", score: 85, status: "Hoàn thành", date: "2024-03-01" },
+                    { examName: "Kỳ thi 2", score: 78, status: "Hoàn thành", date: "2024-03-02" },
+                    // Thêm các kết quả khác ở đây
+                ]
+            },
+            // Thêm các sinh viên khác ở đây
+        ];
+
+        function searchStudent() {
+            var searchTerm = document.getElementById("search-input").value.trim().toLowerCase();
+            var studentResultsDiv = document.getElementById("student-results");
+            studentResultsDiv.innerHTML = "";
+
+            students.forEach(function(student) {
+                if (student.name.toLowerCase().includes(searchTerm) || student.studentID.includes(searchTerm)) {
+                    var studentHeader = `<h2>${student.name} - Mã số sinh viên: ${student.studentID}</h2>`;
+                    var resultsTable = "<table><thead><tr><th>Kỳ thi</th><th>Điểm</th><th>Trạng thái</th><th>Ngày tham gia</th></tr></thead><tbody>";
+
+                    student.results.forEach(function(result) {
+                        resultsTable += `<tr><td>${result.examName}</td><td>${result.score}</td><td>${result.status}</td><td>${result.date}</td></tr>`;
+                    });
+
+                    resultsTable += "</tbody></table>";
+                    studentResultsDiv.innerHTML += studentHeader + resultsTable;
+                }
+            });
+        }
+    </script>
+</body>
+</html>
